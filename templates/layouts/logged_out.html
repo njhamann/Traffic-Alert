@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Generic App</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <link href="{{ STATIC_URL }}css/bootstrap.min.css" rel="stylesheet">
+        <link href="{{ STATIC_URL }}css/bootstrap-responsive.min.css" rel="stylesheet">
+        {% block stylesheet %}{% endblock %}
+        <style>
+            body {
+                padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+            }
+        </style>
+        <link rel="shortcut icon" href="../assets/ico/favicon.ico">
+    </head>
+
+    <body>
+        {% include 'partials/logged_out_header.html' %}
+        <div class="container">
+            {% include 'partials/messages.html' %}
+            <div class="row">
+                {% block content %}{% endblock %}
+            </div>
+        </div> <!-- /containersdfsd -->
+        <script src="{{ STATIC_URL }}js/libs/jquery-1.7.2.min.js"></script>
+        <script src="{{ STATIC_URL }}js/libs/bootstrap.min.js"></script>
+        <script src="{{ STATIC_URL }}js/libs/underscore.min.js"></script>
+        <script src="{{ STATIC_URL }}js/libs/backbone.min.js"></script>
+        {% block javascript %}{% endblock %}
+    </body>
+</html>

@@ -1,0 +1,52 @@
+{% extends "layouts/logged_out.html" %}
+{% load url from future %}
+
+{% block content %}
+    <div class="span8">
+        <div class="page-header">
+            <h3>Sign Up</h3>
+        </div>
+        {% if form.errors %}
+        <p>Your username and password didn't match. Please try again.</p>
+        {% endif %}
+
+        <form method="post" class="form-horizontal" action="{% url 'registration.views.register' %}">
+            {% csrf_token %}
+
+            <div class="control-group">
+                <label class="control-label" for="input01">Email:</label>
+                <div class="controls">
+                    {{ form.email }}            
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="input01">Username:</label>
+                <div class="controls">
+                    {{ form.username }}            
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="input01">Password:</label>
+                <div class="controls">
+                    {{ form.password1 }}            
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="input01">Confirm Password:</label>
+                <div class="controls">
+                    {{ form.password2 }}            
+                </div>
+            </div>
+            <div class="control-group">
+                <div class="controls">
+                    <a href="{% url 'django.contrib.auth.views.login' %}">Already have an account?</a>
+                </div>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Save changes</button>
+                <button class="btn">Cancel</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+

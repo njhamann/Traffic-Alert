@@ -1,0 +1,34 @@
+{% extends "layouts/logged_in.html" %}
+{% block content %}
+    <div class="span8">
+        <div class="page-header">
+            <h3>User Settings</h3>
+        </div>
+        <form class="form-horizontal" action="." method="post">
+            {% csrf_token %}
+            <div class="control-group">
+                <label class="control-label" for="input01">Email:</label>
+                <div class="controls">
+                    <input name="email" value="{{ user.email }}" type="text" id="input01">
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="input01">First Name:</label>
+                <div class="controls">
+                    <input type="text" name="first_name" value="{{ user.first_name }}" id="input01">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="input01">Last Name:</label>
+                <div class="controls">
+                    <input type="text" name="last_name" value="{{ user.last_name }}" id="input01">
+                </div>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Save changes</button>
+                <button class="btn">Cancel</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}

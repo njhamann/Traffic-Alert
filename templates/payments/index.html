@@ -1,0 +1,118 @@
+{% extends "layouts/logged_in.html" %}
+{% load url from future %}
+{% block content %}
+<div class="span9">
+    {% if payment %}
+        <div class="page-header">
+            <h3>Change Your Plan</h3>
+        </div>
+        <p></p> 
+        <p>
+            {% if payment.plan_type != 'basic' %}
+                <a href="{% url 'payments.views.edit' 'basic' %}" class="btn">Change to Basic</a>
+            {% endif %}
+            {% if payment.plan_type != 'standard' %}
+            <a href="{% url 'payments.views.edit' 'standard' %}" class="btn">Change to Standard</a>
+            {% endif %}
+            {% if payment.plan_type != 'pro' %}
+            <a href="{% url 'payments.views.edit' 'pro' %}" class="btn">Change to Pro</a>
+            {% endif %}
+        </p>
+        <div class="page-header">
+            <h3>Update Payment Method</h3>
+        </div>
+        <p>Your current card ends with {{payment.card_digits}}</p>
+        <form class="form-horizontal" action="{% url 'payments.views.update_payment_method' %}" method="POST" id="payment-form">
+            {% csrf_token %}
+            <div class="control-group">
+                <label class="control-label" for="input01">Card Number:</label>
+                <div class="controls">
+                    <input type="text" size="20" autocomplete="off" class="card-number"/>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="input01">CVC:</label>
+                <div class="controls">
+                    <input type="text" size="4" autocomplete="off" class="card-cvc"/>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="input01">Expiration:</label>
+                <div class="controls">
+                    <select class="card-expiry-month">
+                        <option value="01">1</option>
+                        <option value="02">2</option>
+                        <option value="03">3</option>
+                        <option value="04">4</option>
+                        <option value="05">5</option>
+                        <option value="06">6</option>
+                        <option value="07">7</option>
+                        <option value="08">8</option>
+                        <option value="09">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                    </select>
+                    <span> / </span>
+                    <select class="card-expiry-year">
+                        <option value="2012">2012</option>
+                        <option value="2013">2013</option>
+                        <option value="2014">2014</option>
+                        <option value="2015">2015</option>
+                        <option value="2016">2016</option>
+                        <option value="2017">2017</option>
+                        <option value="2018">2018</option>
+                        <option value="2019">2019</option>
+                        <option value="2020">2020</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Save changes</button>
+                <button class="btn">Cancel</button>
+            </div>
+        </form>
+    {% else %}
+        <div class="page-header">
+            <h3>Select a Plan</h3>
+        </div>
+            <a href="{% url 'payments.views.payment' 'basic' %}" class="btn">Sign Up for Basic</a>
+            <a href="{% url 'payments.views.payment' 'standard' %}" class="btn">Sign Up for Standard</a>
+            <a href="{% url 'payments.views.payment' 'pro' %}" class="btn">Sign Up for Pro</a>
+        </p>
+    {% endif %}
+    <div class="page-header">
+        <h3>Delete Account</h3>
+    </div>
+    <a href="{% url 'payments.views.delete' %}" class="btn">Delete Account</a>
+</div>
+{% endblock %}
+{% block javascript %}
+<script type="text/javascript" src="https://js.stripe.com/v1/"></script>
+<script type="text/javascript">
+    Stripe.setPublishableKey('{{ publishable }}');
+    function stripeResponseHandler(status, response) {
+        if (response.error) {
+            $('.submit-button').removeAttr("disabled");
+            $(".payment-errors").html(response.error.message);
+        } else {
+            var form$ = $("#payment-form");
+            var token = response['id'];
+            form$.append("<input type='hidden' name='stripeToken' value='" + token + "' />");
+            form$.get(0).submit();
+        }
+    }
+    $(document).ready(function() {
+        $("#payment-form").submit(function(event) {
+            $('.submit-button').attr("disabled", "disabled");
+            Stripe.createToken({
+                number: $('.card-number').val(),
+                cvc: $('.card-cvc').val(),
+                exp_month: $('.card-expiry-month').val(),
+                exp_year: $('.card-expiry-year').val()
+            }, stripeResponseHandler);
+            return false;
+        });
+    });
+</script>
+{% endblock %}

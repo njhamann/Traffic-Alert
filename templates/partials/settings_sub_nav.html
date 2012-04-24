@@ -1,0 +1,9 @@
+{% load url from future %}
+<div class="span3">
+    <ul class="nav nav-tabs nav-stacked">
+        <li><a href="{% url 'users.views.index' %}">User</a></li>
+        <li><a href="{% url 'accounts.views.index' %}">Account</a></li>
+        <li><a href="{% url 'django.contrib.auth.views.password_change' %}">Password</a></li>
+        <li><a href="{% url 'payments.views.index' %}">Billing</a></li>
+    </ul>
+</div>
